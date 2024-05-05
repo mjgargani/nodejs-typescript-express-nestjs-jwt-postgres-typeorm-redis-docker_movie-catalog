@@ -7,6 +7,7 @@ import { DatabaseModule } from './database/database.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as redisStore from 'cache-manager-redis-store';
 import { RedisClientOptions } from 'redis';
+import { UsersModule } from './users/users.module';
 @Module({
   imports: [
     CacheModule.registerAsync<RedisClientOptions>({
@@ -23,6 +24,7 @@ import { RedisClientOptions } from 'redis';
     }),
     MoviesModule,
     DatabaseModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
