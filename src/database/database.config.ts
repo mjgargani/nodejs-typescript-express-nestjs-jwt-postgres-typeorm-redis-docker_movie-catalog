@@ -9,5 +9,4 @@ export const getTypeOrmConfig = (
   synchronize: true,
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   autoLoadEntities: true,
-  migrations: [__dirname + '/../../migrations/*{.ts,.js}'],
 });
