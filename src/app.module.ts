@@ -22,9 +22,9 @@ import { UsersModule } from './users/users.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    UsersModule,
     MoviesModule,
     DatabaseModule,
-    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
