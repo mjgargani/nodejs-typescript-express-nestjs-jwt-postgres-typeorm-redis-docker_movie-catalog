@@ -3,16 +3,21 @@ services:
   db:
     image: postgres
     environment:
-      POSTGRES_DB: mydatabase
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: movie-catalog
+      POSTGRES_USER: local
+      POSTGRES_PASSWORD: password
     volumes:
       - db_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: always
+    ports:
+      - 5432:5432
 
   cache:
     image: redis
     restart: always
+    ports:
+      - 6379:6379
 
   api:
     build:
@@ -27,10 +32,9 @@ services:
       - db
       - cache
     environment:
-      POSTGRES_URL: postgres://myuser:mypassword@db:5432/mydatabase
+      POSTGRES_URL: postgres://local:password@db:5432/movie-catalog
       REDIS_URL: redis://cache:6379
     command: npm run start:dev
     restart: always
-
 volumes:
   db_data:

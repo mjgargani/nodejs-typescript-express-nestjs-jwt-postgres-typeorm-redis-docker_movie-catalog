@@ -6,7 +6,7 @@ export const getTypeOrmConfig = (
 ): TypeOrmModuleOptions => ({
   type: 'postgres',
   url: configService.getOrThrow<string>('POSTGRES_URL'),
-  synchronize: true,
+  // synchronize: true,
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   autoLoadEntities: true,
 });

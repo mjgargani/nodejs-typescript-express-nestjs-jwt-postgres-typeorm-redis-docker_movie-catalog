@@ -1,6 +1,15 @@
 {
-  "cSpell.words": [
-    "postgres",
-    "typeorm"
+  "cSpell.words": ["postgres", "typeorm"],
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "askForPassword": true,
+      "driver": "PostgreSQL",
+      "name": "default",
+      "database": "movie-catalog",
+      "username": "local"
+    }
   ]
 }
