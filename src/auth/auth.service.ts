@@ -1,17 +1,30 @@
-import { Injectable } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import * as bcrypt from 'bcrypt';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from '../users/entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOne(username);
-    if (user && user.password === pass) {
+  async validateUser(
+    username: CreateUserDto['username'],
+    password: CreateUserDto['password'],
+  ): Promise<any> {
+    const user = await this.usersRepository.findOne({
+      where: {
+        username,
+      },
+    });
+    console.log({ password, db: user.password });
+    if (user && (await bcrypt.compare(password, user.password))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;
       return result;
@@ -19,8 +32,21 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
+  async login(
+    username: CreateUserDto['username'],
+    password: CreateUserDto['password'],
+  ) {
+    const validatedUser = await this.validateUser(username, password);
+    if (!validatedUser) {
+      throw new UnauthorizedException('Login failed');
+    }
+
+    const payload = {
+      username: validatedUser.username,
+      email: validatedUser.email,
+      sub: validatedUser.id,
+    };
+
     return {
       access_token: this.jwtService.sign(payload),
     };

@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS "movie" (
     "updatedAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO "user" (username, password, email) VALUES ('default', 'password', 'default@email.com');
+INSERT INTO "user" (username, password, email) VALUES ('default', '$2a$10$gBV8RsSzlNDvaBZ2jkiZG.VsvrvOTGKrn6GD89C2sA1ey2rsTJItG', 'default@email.com');
 
 INSERT INTO "movie" (title, description, year, director, genre) VALUES ('Filme 1', 'Descrição do Filme 1', 2001, 'Diretor 1', 'Gênero 1');
 INSERT INTO "movie" (title, description, year, director, genre) VALUES ('Filme 2', 'Descrição do Filme 2', 2002, 'Diretor 2', 'Gênero 2');
