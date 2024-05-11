@@ -8,7 +8,7 @@
       "askForPassword": true,
       "driver": "PostgreSQL",
       "name": "default",
-      "database": "movie-catalog",
+      "database": "movie_catalog",
       "username": "local"
     }
   ]

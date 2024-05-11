@@ -7,10 +7,13 @@ import {
   BeforeInsert,
   BeforeUpdate,
 } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import { ConfigService } from '@nestjs/config';
+import * as argon2 from 'argon2';
 
 @Entity()
 export class User {
+  constructor(private configService: ConfigService) {}
+
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -36,7 +39,13 @@ export class User {
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
-    const salt = await bcrypt.genSalt();
-    this.password = await bcrypt.hash(this.password, salt);
+    const hash = await argon2.hash(this.password, {
+      type: argon2.argon2id,
+      memoryCost: 4096,
+      timeCost: 3,
+      parallelism: 1,
+      salt: Buffer.from(this.configService.getOrThrow('USER_PASSWORD_HASH')),
+    });
+    this.password = hash;
   }
 }

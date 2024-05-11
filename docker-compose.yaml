@@ -3,7 +3,7 @@ services:
   db:
     image: postgres
     environment:
-      POSTGRES_DB: movie-catalog
+      POSTGRES_DB: movie_catalog
       POSTGRES_USER: local
       POSTGRES_PASSWORD: password
     volumes:
@@ -32,8 +32,10 @@ services:
       - db
       - cache
     environment:
-      POSTGRES_URL: postgres://local:password@db:5432/movie-catalog
+      POSTGRES_URL: postgres://local:password@db:5432/movie_catalog
       REDIS_URL: redis://cache:6379
+    env_file:
+      - .env
     command: npm run start:dev
     restart: always
 volumes:
