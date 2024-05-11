@@ -17,7 +17,7 @@ const configService = new ConfigService();
     PassportModule,
     JwtModule.register({
       secret: configService.getOrThrow<string>('JWT_SECRET'),
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '300s' },
     }),
     TypeOrmModule.forFeature([User]),
   ],
