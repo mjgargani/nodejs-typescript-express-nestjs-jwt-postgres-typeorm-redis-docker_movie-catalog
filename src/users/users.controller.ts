@@ -12,11 +12,13 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtGuard } from '../jwt/jwt.guard';
+import { LoggerService } from '../logger/logger.service';
 
 @Controller('users')
 @UseGuards(JwtGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+  private readonly logger = new LoggerService(UsersController.name);
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {

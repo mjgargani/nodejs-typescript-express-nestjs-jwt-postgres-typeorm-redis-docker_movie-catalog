@@ -12,10 +12,12 @@ import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { JwtGuard } from '../jwt/jwt.guard';
+import { LoggerService } from '../logger/logger.service';
 
 @Controller('movies')
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
+  private readonly logger = new LoggerService(MoviesController.name);
 
   @UseGuards(JwtGuard)
   @Post()
