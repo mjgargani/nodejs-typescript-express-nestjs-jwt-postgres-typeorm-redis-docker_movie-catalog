@@ -23,12 +23,13 @@ export class AuthService {
         username,
       },
     });
-    console.log({ password, db: user.password });
+
     if (user && (await bcrypt.compare(password, user.password))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;
       return result;
     }
+
     return null;
   }
 
@@ -44,7 +45,7 @@ export class AuthService {
     const payload = {
       username: validatedUser.username,
       email: validatedUser.email,
-      sub: validatedUser.id,
+      id: validatedUser.id,
     };
 
     return {
