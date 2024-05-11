@@ -9,6 +9,7 @@ import * as redisStore from 'cache-manager-redis-store';
 import { RedisClientOptions } from 'redis';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { LoggerModule } from './logger/logger.module';
 @Module({
   imports: [
     CacheModule.registerAsync<RedisClientOptions>({
@@ -27,6 +28,7 @@ import { AuthModule } from './auth/auth.module';
     MoviesModule,
     DatabaseModule,
     AuthModule,
+    LoggerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
