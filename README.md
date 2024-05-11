@@ -10,7 +10,7 @@ Por favor organize, design, teste, faça a documentação e deploy do seu códig
 
 ## Tarefa (funcional)
 
-1. Desenvolva um sistema de autenticação JWT **(TO-DO)**.
+1. Desenvolva um sistema de autenticação JWT.
 2. Você deve construir uma CRUD de um catálogo de filmes. Todos os endpoints dessa CRUD só devem ser consumidos por um usuário autenticado.
 
 ## Ferramentas requeridas/ Tempo de Experiência
