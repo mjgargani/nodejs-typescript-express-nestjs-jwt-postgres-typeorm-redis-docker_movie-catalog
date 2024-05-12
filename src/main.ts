@@ -7,11 +7,6 @@ import { ConfigService } from '@nestjs/config';
 async function bootstrap() {
   const configService = new ConfigService();
 
-  console.warn({
-    postgres: configService.getOrThrow<string>('POSTGRES_URL'),
-    redis: configService.getOrThrow<string>('REDIS_URL'),
-  });
-
   const app = await NestFactory.create(AppModule);
 
   const { httpAdapter } = app.get(HttpAdapterHost);
