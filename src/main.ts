@@ -5,6 +5,13 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
+  const configService = new ConfigService();
+
+  console.warn({
+    postgres: configService.getOrThrow<string>('POSTGRES_URL'),
+    redis: configService.getOrThrow<string>('REDIS_URL'),
+  });
+
   const app = await NestFactory.create(AppModule);
 
   const { httpAdapter } = app.get(HttpAdapterHost);
@@ -21,8 +28,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  const configService = new ConfigService();
-
-  await app.listen(configService.get<number>('PORT'));
+  await app.listen(configService.getOrThrow<number>('PORT') || 3000);
 }
 bootstrap();
