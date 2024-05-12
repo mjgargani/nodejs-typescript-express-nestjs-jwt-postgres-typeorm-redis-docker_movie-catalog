@@ -18,7 +18,7 @@ Por favor organize, design, teste, faça a documentação e deploy do seu códig
 1. TypeScript / 2 Anos
 2. Nest.js / Experiência prévia com Express (2 anos)
 3. TypeORM / Experiência prévia com Sequelize (1 ano)
-4. Swagger **(TO-DO)** / Sem experiência prévia
+4. Swagger / Sem experiência prévia
 5. Docker / 1 Ano
 6. Redis / Sem experiência prévia
 7. PostgreSQL / Experiência prévia com MySQL (1~2 anos)
