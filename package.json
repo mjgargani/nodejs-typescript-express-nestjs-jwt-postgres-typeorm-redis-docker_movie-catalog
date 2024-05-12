@@ -11,7 +11,7 @@
     "start": "ts-node src/main.ts",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node ./build/src/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "npm run test:e2e",
     "test:watch": "npm run test:e2e --watch",
