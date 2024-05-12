@@ -7,6 +7,7 @@ import {
   Patch,
   Delete,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -15,6 +16,13 @@ import { JwtGuard } from '../jwt/jwt.guard';
 import { LoggerService } from '../logger/logger.service';
 import { ApiBody, ApiHeader, ApiResponse } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
+import { IsNotEmpty, IsString } from 'class-validator';
+
+export class IdParam {
+  @IsNotEmpty()
+  @IsString()
+  id: string;
+}
 
 @Controller('users')
 @UseGuards(JwtGuard)
@@ -33,7 +41,7 @@ export class UsersController {
     type: User,
   })
   @Post()
-  async create(@Body() createUserDto: User) {
+  async create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
@@ -61,8 +69,8 @@ export class UsersController {
     type: User,
   })
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+  async findOne(@Param() param: IdParam) {
+    return this.usersService.findOne(param.id);
   }
 
   @ApiHeader({
@@ -76,8 +84,11 @@ export class UsersController {
     type: User,
   })
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  async update(
+    @Param() param: IdParam,
+    @Body(ValidationPipe) updateUserDto: UpdateUserDto,
+  ) {
+    return this.usersService.update(param.id, updateUserDto);
   }
 
   @ApiHeader({
@@ -92,8 +103,8 @@ export class UsersController {
     },
   })
   @Delete(':id')
-  async remove(@Param('id') id: string) {
-    await this.usersService.remove(id);
-    return { id };
+  async remove(@Param() param: IdParam) {
+    await this.usersService.remove(param.id);
+    return { id: param.id };
   }
 }

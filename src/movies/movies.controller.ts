@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
@@ -15,6 +16,7 @@ import { JwtGuard } from '../jwt/jwt.guard';
 import { LoggerService } from '../logger/logger.service';
 import { ApiBody, ApiHeader, ApiResponse } from '@nestjs/swagger';
 import { Movie } from './entities/movie.entity';
+import { IdParam } from '../users/users.controller';
 
 @Controller('movies')
 export class MoviesController {
@@ -33,7 +35,7 @@ export class MoviesController {
   })
   @UseGuards(JwtGuard)
   @Post()
-  async create(@Body() createMovieDto: Movie) {
+  async create(@Body(ValidationPipe) createMovieDto: CreateMovieDto) {
     return this.moviesService.create(createMovieDto);
   }
 
@@ -53,8 +55,8 @@ export class MoviesController {
     type: Movie,
   })
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return this.moviesService.findOne(id);
+  async findOne(@Param() param: IdParam) {
+    return this.moviesService.findOne(param.id);
   }
 
   @ApiHeader({
@@ -70,10 +72,10 @@ export class MoviesController {
   @UseGuards(JwtGuard)
   @Patch(':id')
   async update(
-    @Param('id') id: string,
-    @Body() updateMovieDto: UpdateMovieDto,
+    @Param() param: IdParam,
+    @Body(ValidationPipe) updateMovieDto: UpdateMovieDto,
   ) {
-    return this.moviesService.update(id, updateMovieDto);
+    return this.moviesService.update(param.id, updateMovieDto);
   }
 
   @ApiHeader({
@@ -89,8 +91,8 @@ export class MoviesController {
   })
   @UseGuards(JwtGuard)
   @Delete(':id')
-  async remove(@Param('id') id: string) {
-    await this.moviesService.remove(id);
-    return { id };
+  async remove(@Param() param: IdParam) {
+    await this.moviesService.remove(param.id);
+    return { id: param.id };
   }
 }

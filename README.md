@@ -27,7 +27,7 @@ Por favor organize, design, teste, faça a documentação e deploy do seu códig
 
 A arquitetura deve ser composta de uma aplicação provendo uma API RESTful em JSON, utilize do Redis como seu cache.
 
-OBS: Lembre-se de validar **(TO-DO)** a informação tratada em cada endpoint.
+OBS: Lembre-se de validar a informação tratada em cada endpoint.
 
 ## Back-end
 

@@ -1,14 +1,21 @@
-import { Controller, Request, Post } from '@nestjs/common';
+import { Controller, Post, ValidationPipe, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoggerService } from '../logger/logger.service';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 
 export class LoginDto {
   @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(4)
   username: string;
 
   @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(8)
   password: string;
 }
 
@@ -29,8 +36,8 @@ export class AuthController {
     type: LoginResponse,
   })
   @Post('login')
-  async login(@Request() req) {
-    const { username, password } = req.body;
+  async login(@Body(ValidationPipe) login: LoginDto) {
+    const { username, password } = login;
     return this.authService.login(username, password);
   }
 }

@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../users/entities/user.entity';
 import { Repository } from 'typeorm';
 import * as argon2 from 'argon2';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +25,18 @@ export class AuthService {
       },
     });
 
-    if (user && (await argon2.verify(user.password, password))) {
+    const configService = new ConfigService();
+    const secret = Buffer.from(
+      configService.getOrThrow('USER_PASSWORD_HASH').toString(),
+      'hex',
+    );
+
+    if (
+      user &&
+      (await argon2.verify(user.password, password, {
+        secret,
+      }))
+    ) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;
       return result;

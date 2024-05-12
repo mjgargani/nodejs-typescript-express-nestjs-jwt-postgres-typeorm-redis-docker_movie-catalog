@@ -45,12 +45,12 @@ export class User {
   @BeforeUpdate()
   async hashPassword() {
     const configService = new ConfigService();
+    const secret = Buffer.from(
+      configService.getOrThrow('USER_PASSWORD_HASH').toString(),
+      'hex',
+    );
     const hash = await argon2.hash(this.password, {
-      type: argon2.argon2id,
-      memoryCost: 4096,
-      timeCost: 3,
-      parallelism: 1,
-      salt: Buffer.from(configService.getOrThrow('USER_PASSWORD_HASH')),
+      secret,
     });
     this.password = hash;
   }

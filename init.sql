@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS "movie" (
 
 INSERT INTO "user" (username, password, email) VALUES (
   'default', 
-  '$argon2id$v=19$m=4096,t=3,p=1$rgkI38+tvKrh/sQKtEYqpsnMrNibH6XwTqztIxooOvk$RfXu58JYCGoZtD16/nMrICDYDRbUGRFD6Je0FdHv6uU', 
+  '$argon2id$v=19$m=65536,t=3,p=4$/4uENUnrSzAlExkyeBw/CA$UuUwIIr01ISEcAL+Lt8riWE0RgUnbZYEkPbMPsDR+74', 
   'default@email.com');
 
 INSERT INTO "movie" (title, description, year, director, genre) VALUES ('Filme 1', 'Descrição do Filme 1', 2001, 'Diretor 1', 'Gênero 1');
