@@ -1,31 +1,45 @@
+import 'dotenv/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
 import { AppModule } from '../src/app.module';
+import { authServiceMock, configServiceMock } from './mock';
 
 describe('MoviesController (e2e)', () => {
   let app: INestApplication;
   let movieId: string;
+  let authToken: string;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
 
+    configServiceMock();
+    authServiceMock();
+
     app = moduleFixture.createNestApplication();
     await app.init();
 
-    const response = await request(app.getHttpServer()).post('/movies').send({
-      title: 'Filme Teste',
-      description: 'Descrição Filme Teste',
-      year: 2024,
-      director: 'Nome Diretor Teste',
-      genre: 'Nome Genero Teste',
-    });
-    movieId = response.body.id;
+    authToken = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({ username: 'default', password: 'password' })
+      .then((response) => response.body.access_token);
+
+    movieId = await request(app.getHttpServer())
+      .post('/movies')
+      .set('authorization', authToken)
+      .send({
+        title: 'Filme Teste',
+        description: 'Descrição Filme Teste',
+        year: 2024,
+        director: 'Nome Diretor Teste',
+        genre: 'Nome Genero Teste',
+      })
+      .then((response) => response.body.id);
   });
 
-  it('/movies (GET)', () => {
+  it.only('/movies (GET)', () => {
     return request(app.getHttpServer())
       .get('/movies')
       .expect(200)
@@ -56,6 +70,7 @@ describe('MoviesController (e2e)', () => {
     };
     return request(app.getHttpServer())
       .patch(`/movies/${movieId}`)
+      .set('authorization', authToken)
       .send(updatedEntry)
       .expect(200)
       .then((response) => {
@@ -70,6 +85,7 @@ describe('MoviesController (e2e)', () => {
 
   it('/movies/:id (DELETE)', () => {
     return request(app.getHttpServer())
+      .set('authorization', authToken)
       .delete(`/movies/${movieId}`)
       .expect(200);
   });
