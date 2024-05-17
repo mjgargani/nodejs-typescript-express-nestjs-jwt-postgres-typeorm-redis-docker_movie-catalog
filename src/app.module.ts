@@ -13,6 +13,7 @@ import { LoggerModule } from './logger/logger.module';
 
 const configService = new ConfigService();
 const testEnv = configService.getOrThrow<string>('NODE_ENV') === 'test';
+
 @Module({
   imports: [
     testEnv
@@ -33,9 +34,9 @@ const testEnv = configService.getOrThrow<string>('NODE_ENV') === 'test';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    DatabaseModule,
     UsersModule,
     MoviesModule,
-    DatabaseModule,
     AuthModule,
     LoggerModule,
   ],

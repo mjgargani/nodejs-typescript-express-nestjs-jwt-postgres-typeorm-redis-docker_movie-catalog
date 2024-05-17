@@ -15,14 +15,14 @@ export class MoviesService {
     private readonly cacheManager: Cache,
   ) {}
 
-  async create(createMovieDto: CreateMovieDto): Promise<Movie> {
+  async create(createMovieDto: CreateMovieDto): Promise<CreateMovieDto> {
     return this.moviesRepository.save(createMovieDto);
   }
 
-  async findAll() {
+  async findAll(): Promise<CreateMovieDto[]> {
     const getCache = await this.cacheManager.get('movies');
     if (getCache) {
-      return getCache;
+      return getCache as CreateMovieDto[];
     } else {
       const movies = await this.moviesRepository.find();
       await this.cacheManager.set('movies', movies);
@@ -30,10 +30,10 @@ export class MoviesService {
     }
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<CreateMovieDto> {
     const getCache = await this.cacheManager.get(`movie-${id}`);
     if (getCache) {
-      return getCache;
+      return getCache as CreateMovieDto;
     } else {
       const movie = await this.moviesRepository.findOne({
         where: {
@@ -45,7 +45,10 @@ export class MoviesService {
     }
   }
 
-  async update(id: string, updateMovieDto: UpdateMovieDto) {
+  async update(
+    id: string,
+    updateMovieDto: UpdateMovieDto,
+  ): Promise<UpdateMovieDto> {
     await this.moviesRepository.update(id, updateMovieDto);
     const updated = await this.moviesRepository.findOne({
       where: {

@@ -30,14 +30,17 @@ export class User {
   email: string;
 
   @ApiProperty()
-  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({
+    type: process.env.NODE_ENV === 'test' ? 'datetime' : 'timestamp',
+    default: new Date().toISOString(),
+  })
   createdAt: Date;
 
   @ApiProperty()
   @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    onUpdate: 'CURRENT_TIMESTAMP',
+    type: process.env.NODE_ENV === 'test' ? 'datetime' : 'timestamp',
+    default: new Date().toISOString(),
+    onUpdate: new Date().toISOString(),
   })
   updatedAt: Date;
 
