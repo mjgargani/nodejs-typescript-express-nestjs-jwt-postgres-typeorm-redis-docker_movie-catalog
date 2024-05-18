@@ -80,6 +80,7 @@ describe('MoviesController (e2e)', () => {
       .expect('Content-Type', /json/)
       .then((response) => {
         expect(Array.isArray(response.body)).toBe(true);
+        expect(response.body).toHaveLength(3);
       });
   });
 
