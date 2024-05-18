@@ -1,4 +1,4 @@
-import { ConfigService } from '@nestjs/config';
+import 'dotenv/config';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   Entity,

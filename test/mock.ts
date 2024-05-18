@@ -1,8 +1,6 @@
 import 'dotenv/config';
 import { ConfigService } from '@nestjs/config';
 import { MockProxy, mock } from 'jest-mock-extended';
-import { AuthService } from '../src/auth/auth.service';
-import usersMock from './users.json';
 
 process.env.POSTGRES_URL = '';
 process.env.REDIS_URL = '';
@@ -14,9 +12,4 @@ export const configServiceMock = () => {
   return configService.getOrThrow.mockImplementation(
     (key: string) => process.env[key] as unknown,
   );
-};
-
-export const authServiceMock = () => {
-  const authService: MockProxy<AuthService> = mock<AuthService>();
-  return authService.validateUser.mockResolvedValue(usersMock[0]);
 };

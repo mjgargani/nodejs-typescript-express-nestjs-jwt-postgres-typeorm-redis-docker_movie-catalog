@@ -3,7 +3,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
-import { authServiceMock, configServiceMock } from './mock';
+import { configServiceMock } from './mock';
+import { User } from '../src/users/entities/user.entity';
+import { Movie } from '../src/movies/entities/movie.entity';
+import { getRepositoryToken } from '@nestjs/typeorm';
 
 describe('MoviesController (e2e)', () => {
   let app: INestApplication;
@@ -16,14 +19,45 @@ describe('MoviesController (e2e)', () => {
     }).compile();
 
     configServiceMock();
-    authServiceMock();
 
     app = moduleFixture.createNestApplication();
     await app.init();
 
+    const userRepository = moduleFixture.get(getRepositoryToken(User));
+    const movieRepository = moduleFixture.get(getRepositoryToken(Movie));
+
+    const testUser = {
+      username: 'test',
+      password: 'password',
+    };
+
+    const user = userRepository.create({
+      ...testUser,
+      email: 'default@email.com',
+    });
+    await userRepository.save(user);
+
+    const movie1 = movieRepository.create({
+      title: 'Filme 1',
+      description: 'Descrição do Filme 1',
+      year: 2001,
+      director: 'Diretor 1',
+      genre: 'Gênero 1',
+    });
+    await movieRepository.save(movie1);
+
+    const movie2 = movieRepository.create({
+      title: 'Filme 2',
+      description: 'Descrição do Filme 2',
+      year: 2002,
+      director: 'Diretor 2',
+      genre: 'Gênero 2',
+    });
+    await movieRepository.save(movie2);
+
     authToken = await request(app.getHttpServer())
       .post('/auth/login')
-      .send({ username: 'default', password: 'password' })
+      .send(testUser)
       .then((response) => response.body.access_token);
 
     movieId = await request(app.getHttpServer())
@@ -39,7 +73,7 @@ describe('MoviesController (e2e)', () => {
       .then((response) => response.body.id);
   });
 
-  it.only('/movies (GET)', () => {
+  it('/movies (GET)', async () => {
     return request(app.getHttpServer())
       .get('/movies')
       .expect(200)
@@ -49,7 +83,7 @@ describe('MoviesController (e2e)', () => {
       });
   });
 
-  it('/movies/:id (GET)', () => {
+  it('/movies/:id (GET)', async () => {
     return request(app.getHttpServer())
       .get(`/movies/${movieId}`)
       .expect(200)
@@ -60,7 +94,7 @@ describe('MoviesController (e2e)', () => {
       });
   });
 
-  it('/movies/:id (PATCH)', () => {
+  it('/movies/:id (PATCH)', async () => {
     const updatedEntry = {
       title: 'Filme Teste Atualizado',
       description: 'Descrição Filme Teste Atualizado',
@@ -83,15 +117,14 @@ describe('MoviesController (e2e)', () => {
       });
   });
 
-  it('/movies/:id (DELETE)', () => {
+  it('/movies/:id (DELETE)', async () => {
     return request(app.getHttpServer())
-      .set('authorization', authToken)
       .delete(`/movies/${movieId}`)
+      .set('authorization', authToken)
       .expect(200);
   });
 
   afterEach(async () => {
-    await request(app.getHttpServer()).delete(`/movies/${movieId}`);
     await app.close();
   });
 });
