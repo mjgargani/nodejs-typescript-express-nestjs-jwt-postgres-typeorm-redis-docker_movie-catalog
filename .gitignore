@@ -7,4 +7,5 @@ tmp/
 temp/
 .env
 debug.ts
+logs/
 **/*.log
