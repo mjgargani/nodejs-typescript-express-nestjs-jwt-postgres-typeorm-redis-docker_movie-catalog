@@ -37,4 +37,9 @@ jobs:
         run: npm ci
 
       - name: Run E2E tests
-        run: npm run test
+        env:
+          POSTGRES_URL: ''
+          REDIS_URL: ''
+          USER_PASSWORD_HASH: 'password_secret'
+          JWT_SECRET: 'jwt_secret'
+        run: npm test
