@@ -33,6 +33,6 @@ OBS: Lembre-se de validar a informação tratada em cada endpoint.
 
 ## Deploy
 
-[Render (Individual)](https://render.com/about)
+[Render (Individual)](https://render.com/about) (há um _delay_ de inicialização no _free-tier_)
 
 > 🌐 https://gargani-dev-movie-catalog.onrender.com/api

@@ -12,11 +12,11 @@ import { AuthModule } from './auth/auth.module';
 import { LoggerModule } from './logger/logger.module';
 
 const configService = new ConfigService();
-const testEnv = configService.getOrThrow<string>('NODE_ENV') === 'test';
+const testEnv = configService.get<string>('NODE_ENV') === 'test';
 
 @Module({
   imports: [
-    testEnv
+    !!testEnv
       ? CacheModule.register({
           imports: [ConfigModule],
           inject: [ConfigService],

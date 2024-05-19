@@ -4,12 +4,14 @@ import { ConfigService } from '@nestjs/config';
 export const getTypeOrmConfig = (
   configService: ConfigService,
 ): TypeOrmModuleOptions => {
-  const testEnv = configService.getOrThrow<string>('NODE_ENV') === 'test';
+  const testEnv = configService.get<string>('NODE_ENV') === 'test';
 
   return {
-    type: testEnv ? 'sqlite' : 'postgres',
-    url: testEnv ? undefined : configService.getOrThrow<string>('POSTGRES_URL'),
-    database: testEnv ? ':memory:' : undefined,
+    type: !!testEnv ? 'sqlite' : 'postgres',
+    url: !!testEnv
+      ? undefined
+      : configService.getOrThrow<string>('POSTGRES_URL'),
+    database: !!testEnv ? ':memory:' : undefined,
     synchronize: !!testEnv,
     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
     autoLoadEntities: true,
